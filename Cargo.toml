@@ -1,0 +1,10 @@
+[package]
+name = "supra-multiaddr"
+version = "0.1.0"
+authors = ["Wim Looman <wim@nemo157.com>"]
+
+[dependencies]
+
+supra-base58 = { path = "../base58" }
+supra-multihash = { path = "../multihash", default-features = false }
+supra-varint = { path = "../varint" }
