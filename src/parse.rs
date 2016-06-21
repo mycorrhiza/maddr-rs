@@ -57,15 +57,16 @@ impl From<io::Error> for ParseSegmentError {
 fn segment_from_strs<'a, S: Iterator<Item=&'a str>>(strs: &mut S) -> Result<Option<Segment>, ParseSegmentError> {
     let missing_data = ParseSegmentError::Str(Cow::Borrowed("missing segment data"));
     if let Some(s) = strs.next() {
+        let data = || strs.next().ok_or(missing_data);
         Ok(Some(match s {
-            "ip4" => IP4(try!(try!(strs.next().ok_or(missing_data)).parse())),
-            "ip6" => IP6(try!(try!(strs.next().ok_or(missing_data)).parse())),
-            "udp" => Udp(try!(try!(strs.next().ok_or(missing_data)).parse())),
-            "dccp" => Dccp(try!(try!(strs.next().ok_or(missing_data)).parse())),
-            "sctp" => Sctp(try!(try!(strs.next().ok_or(missing_data)).parse())),
-            "tcp" => Tcp(try!(try!(strs.next().ok_or(missing_data)).parse())),
+            "ip4" => IP4(try!(try!(data()).parse())),
+            "ip6" => IP6(try!(try!(data()).parse())),
+            "udp" => Udp(try!(try!(data()).parse())),
+            "dccp" => Dccp(try!(try!(data()).parse())),
+            "sctp" => Sctp(try!(try!(data()).parse())),
+            "tcp" => Tcp(try!(try!(data()).parse())),
             "ipfs" => {
-                let bytes = try!(try!(strs.next().ok_or(missing_data)).from_base58());
+                let bytes = try!(try!(data()).from_base58());
                 let multihash = try!((&bytes[..]).read_multihash());
                 Ipfs(multihash)
             }
