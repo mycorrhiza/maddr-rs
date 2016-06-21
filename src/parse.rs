@@ -65,18 +65,12 @@ fn segment_from_strs<'a, S: Iterator<Item=&'a str>>(strs: &mut S) -> Result<Opti
             "dccp" => Dccp(try!(try!(data()).parse())),
             "sctp" => Sctp(try!(try!(data()).parse())),
             "tcp" => Tcp(try!(try!(data()).parse())),
-            "ipfs" => {
-                let bytes = try!(try!(data()).from_base58());
-                let multihash = try!((&bytes[..]).read_multihash());
-                Ipfs(multihash)
-            }
+            "ipfs" => Ipfs(try!((&try!(try!(data()).from_base58())[..]).read_multihash())),
             "udt" => Udt,
             "utp" => Utp,
             "http" => Http,
             "https" => Https,
-            _ => {
-                return Err(format!("unrecognised segment type {}", s).into())
-            }
+            _ => { return Err(format!("unrecognised segment type {}", s).into()) }
         }))
     } else {
         Ok(None)
