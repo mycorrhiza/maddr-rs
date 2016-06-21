@@ -5,6 +5,7 @@ use supra_varint::ReadVarInt;
 use supra_multihash::ReadMultiHash;
 
 use { MultiAddr, Segment };
+use Segment::*;
 
 trait ReadHelper {
     fn read_u8(&mut self) -> io::Result<u8>;
@@ -51,26 +52,28 @@ impl<R: io::Read> ReadHelper for R {
     }
 
     fn read_segment(&mut self, code: u64) -> io::Result<Segment> {
-        match code {
-            4 => Ok(Segment::IP4(try!(self.read_ipv4addr()))),
-            6 => Ok(Segment::Tcp(try!(self.read_u16_be()))),
-            17 => Ok(Segment::Udp(try!(self.read_u16_be()))),
-            33 => Ok(Segment::Dccp(try!(self.read_u16_be()))),
-            41 => Ok(Segment::IP6(try!(self.read_ipv6addr()))),
-            132 => Ok(Segment::Sctp(try!(self.read_u16_be()))),
-            301 => Ok(Segment::Udt),
-            302 => Ok(Segment::Utp),
+        Ok(match code {
+            4 => IP4(try!(self.read_ipv4addr())),
+            6 => Tcp(try!(self.read_u16_be())),
+            17 => Udp(try!(self.read_u16_be())),
+            33 => Dccp(try!(self.read_u16_be())),
+            41 => IP6(try!(self.read_ipv6addr())),
+            132 => Sctp(try!(self.read_u16_be())),
+            301 => Udt,
+            302 => Utp,
             421 => {
                 let length = try!(self.read_u64_varint());
                 let mut hash_bytes = io::Read::take(self, length);
                 let multihash = try!(hash_bytes.read_multihash());
                 try!(hash_bytes.check_empty());
-                Ok(Segment::Ipfs(multihash))
+                Ipfs(multihash)
             }
-            443 => Ok(Segment::Https),
-            480 => Ok(Segment::Http),
-            _ => Err(io::Error::new(io::ErrorKind::Other, "Invalid code")),
-        }
+            443 => Https,
+            480 => Http,
+            _ => {
+                return Err(io::Error::new(io::ErrorKind::Other, "Invalid code"))
+            }
+        })
     }
 
     fn try_read_segment(&mut self) -> io::Result<Option<Segment>> {

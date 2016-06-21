@@ -8,6 +8,7 @@ use supra_base58::FromBase58;
 use supra_multihash::ReadMultiHash;
 
 use { Segment, MultiAddr };
+use Segment::*;
 
 #[derive(Debug)]
 pub enum ParseSegmentError {
@@ -56,24 +57,26 @@ impl From<io::Error> for ParseSegmentError {
 fn segment_from_strs<'a, S: Iterator<Item=&'a str>>(strs: &mut S) -> Result<Option<Segment>, ParseSegmentError> {
     let missing_data = ParseSegmentError::Str(Cow::Borrowed("missing segment data"));
     if let Some(s) = strs.next() {
-        match s {
-            "ip4" => Ok(Some(Segment::IP4(try!(try!(strs.next().ok_or(missing_data)).parse())))),
-            "ip6" => Ok(Some(Segment::IP6(try!(try!(strs.next().ok_or(missing_data)).parse())))),
-            "udp" => Ok(Some(Segment::Udp(try!(try!(strs.next().ok_or(missing_data)).parse())))),
-            "dccp" => Ok(Some(Segment::Dccp(try!(try!(strs.next().ok_or(missing_data)).parse())))),
-            "sctp" => Ok(Some(Segment::Sctp(try!(try!(strs.next().ok_or(missing_data)).parse())))),
-            "tcp" => Ok(Some(Segment::Tcp(try!(try!(strs.next().ok_or(missing_data)).parse())))),
+        Ok(Some(match s {
+            "ip4" => IP4(try!(try!(strs.next().ok_or(missing_data)).parse())),
+            "ip6" => IP6(try!(try!(strs.next().ok_or(missing_data)).parse())),
+            "udp" => Udp(try!(try!(strs.next().ok_or(missing_data)).parse())),
+            "dccp" => Dccp(try!(try!(strs.next().ok_or(missing_data)).parse())),
+            "sctp" => Sctp(try!(try!(strs.next().ok_or(missing_data)).parse())),
+            "tcp" => Tcp(try!(try!(strs.next().ok_or(missing_data)).parse())),
             "ipfs" => {
                 let bytes = try!(try!(strs.next().ok_or(missing_data)).from_base58());
                 let multihash = try!((&bytes[..]).read_multihash());
-                Ok(Some(Segment::Ipfs(multihash)))
+                Ipfs(multihash)
             }
-            "udt" => Ok(Some(Segment::Udt)),
-            "utp" => Ok(Some(Segment::Utp)),
-            "http" => Ok(Some(Segment::Http)),
-            "https" => Ok(Some(Segment::Https)),
-            _ => Err(format!("unrecognised segment type {}", s).into()),
-        }
+            "udt" => Udt,
+            "utp" => Utp,
+            "http" => Http,
+            "https" => Https,
+            _ => {
+                return Err(format!("unrecognised segment type {}", s).into())
+            }
+        }))
     } else {
         Ok(None)
     }
