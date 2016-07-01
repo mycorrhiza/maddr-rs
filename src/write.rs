@@ -1,8 +1,8 @@
 use std::io;
 use std::net::{ Ipv4Addr, Ipv6Addr };
 
-use supra_varint::WriteVarInt;
-use supra_multihash::WriteMultiHash;
+use varint::WriteVarInt;
+use multihash::WriteMultiHash;
 
 use { MultiAddr, Segment };
 use Segment::*;

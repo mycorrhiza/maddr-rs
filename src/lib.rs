@@ -1,6 +1,6 @@
-extern crate supra_base58;
-extern crate supra_multihash;
-extern crate supra_varint;
+extern crate base58;
+extern crate multihash;
+extern crate varint;
 
 mod multiaddr;
 mod segment;

@@ -4,8 +4,8 @@ use std::net::AddrParseError;
 use std::borrow::Cow;
 use std::io;
 
-use supra_base58::FromBase58;
-use supra_multihash::ReadMultiHash;
+use base58::FromBase58;
+use multihash::ReadMultiHash;
 
 use { Segment, MultiAddr };
 use Segment::*;

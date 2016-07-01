@@ -1,7 +1,7 @@
 use std::fmt;
 
-use supra_base58::ToBase58;
-use supra_multihash::WriteMultiHash;
+use base58::ToBase58;
+use multihash::WriteMultiHash;
 
 use { Segment, MultiAddr };
 

@@ -1,6 +1,6 @@
 use std::net::{ Ipv4Addr, Ipv6Addr };
 
-use supra_multihash::MultiHash;
+use multihash::MultiHash;
 
 #[derive(PartialEq, Eq, Debug)]
 pub enum Segment {

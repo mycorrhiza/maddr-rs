@@ -1,8 +1,8 @@
 use std::io;
 use std::net::{ Ipv4Addr, Ipv6Addr };
 
-use supra_varint::ReadVarInt;
-use supra_multihash::ReadMultiHash;
+use varint::ReadVarInt;
+use multihash::ReadMultiHash;
 
 use { MultiAddr, Segment };
 use Segment::*;
