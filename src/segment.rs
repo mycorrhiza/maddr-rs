@@ -2,7 +2,7 @@ use std::net::{ Ipv4Addr, Ipv6Addr };
 
 use multihash::MultiHash;
 
-#[derive(PartialEq, Eq, Debug, Clone)]
+#[derive(PartialEq, Eq, Clone)]
 pub enum Segment {
     Dccp(u16),
     Http,

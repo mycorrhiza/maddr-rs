@@ -45,6 +45,23 @@ impl fmt::Display for MultiAddr {
     }
 }
 
+impl fmt::Debug for MultiAddr {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        try!(f.write_str("MultiAddr(\""));
+        try!(fmt::Display::fmt(self, f));
+        try!(f.write_str("\")"));
+        Ok(())
+    }
+}
+
+impl fmt::Debug for Segment {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        try!(f.write_str("Segment(\""));
+        try!(fmt::Display::fmt(self, f));
+        try!(f.write_str("\")"));
+        Ok(())
+    }
+}
 #[cfg(test)]
 mod tests {
     use std::net::{ Ipv4Addr, Ipv6Addr };

@@ -1,6 +1,6 @@
 use Segment;
 
-#[derive(Eq, PartialEq, Debug, Clone)]
+#[derive(Eq, PartialEq, Clone)]
 pub struct MultiAddr {
     segments: Vec<Segment>,
 }
