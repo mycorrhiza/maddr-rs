@@ -5,6 +5,6 @@ authors = ["Wim Looman <wim@nemo157.com>"]
 
 [dependencies]
 
-base58 = { path = "../base58" }
-multihash = { path = "../multihash" }
-varint = { path = "../varint" }
+base58 = { git = "https://github.com/Nemo157/base58-rs" }
+multihash = { git = "https://github.com/Nemo157/multihash-rs" }
+varint = { git = "https://github.com/Nemo157/varint-rs" }
