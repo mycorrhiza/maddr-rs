@@ -113,8 +113,7 @@ impl<R: io::Read> ReadMultiAddr for R {
 mod tests {
     use std::net::{ Ipv4Addr, Ipv6Addr };
     use { Segment, MultiAddr, ReadMultiAddr };
-    use supra_multihash as mh;
-    use supra_multihash::MultiHash;
+    use multihash::MultiHash;
 
     #[test]
     fn ip4() {
@@ -139,12 +138,12 @@ mod tests {
 
     #[test]
     fn ipfs() {
-        let digest = mh::Digest::Sha2_256([
+        let multihash = MultiHash::Sha2_256([
             213, 46, 187, 137, 216, 91, 2, 162,
             132, 148, 130, 3, 166, 47, 242, 131,
             137, 197, 124, 159, 66, 190, 236, 78,
             194, 13, 183, 106, 104, 145, 28, 11,
-        ]);
+        ], 32);
 
         let mut buffer: &[u8] = &[
             0b10100101, 0b00000011, 34,
@@ -156,6 +155,6 @@ mod tests {
         ];
         assert_eq!(
             buffer.read_multiaddr().unwrap(),
-            MultiAddr::new(vec![Segment::Ipfs(MultiHash::new(32, digest))]));
+            MultiAddr::new(vec![Segment::Ipfs(multihash)]));
     }
 }

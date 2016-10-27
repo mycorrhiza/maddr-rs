@@ -56,7 +56,7 @@ impl<W: io::Write> WriteHelper for W {
             Udp(port) | Dccp(port) | Sctp(port) | Tcp(port) =>
                 try!(self.write_u16_be(port)),
             Ipfs(ref multihash) => {
-                try!(self.write_u64_varint(multihash.total_length() as u64));
+                try!(self.write_u64_varint(multihash.output_len() as u64));
                 try!(self.write_multihash(multihash));
             }
             Udt | Utp | Http | Https => {
@@ -83,8 +83,7 @@ impl<W: io::Write> WriteMultiAddr for W {
 mod tests {
     use std::net::{ Ipv4Addr, Ipv6Addr };
     use { Segment, MultiAddr, WriteMultiAddr };
-    use supra_multihash as mh;
-    use supra_multihash::MultiHash;
+    use multihash::MultiHash;
 
     #[test]
     fn ip4() {
@@ -107,13 +106,13 @@ mod tests {
 
     #[test]
     fn ipfs() {
-        let digest = mh::Digest::Sha2_256([
+        let multihash = MultiHash::Sha2_256([
             213, 46, 187, 137, 216, 91, 2, 162,
             132, 148, 130, 3, 166, 47, 242, 131,
             137, 197, 124, 159, 66, 190, 236, 78,
             194, 13, 183, 106, 104, 145, 28, 11,
-        ]);
-        let segment = Segment::Ipfs(MultiHash::new(32, digest));
+        ], 32);
+        let segment = Segment::Ipfs(multihash);
 
         let mut buffer = Vec::with_capacity(37);
         buffer.write_multiaddr(&MultiAddr::new(vec![segment])).unwrap();
