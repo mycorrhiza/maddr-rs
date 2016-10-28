@@ -1,61 +1,26 @@
 use std::str::FromStr;
-use std::num::ParseIntError;
-use std::net::AddrParseError;
-use std::borrow::Cow;
-use std::io;
 
 use base58::FromBase58;
 use multihash::ReadMultiHash;
 
 use { Segment, MultiAddr };
 use Segment::*;
+pub use self::error::*;
 
-#[derive(Debug)]
-pub enum ParseSegmentError {
-    Str(Cow<'static, str>),
-    Num(ParseIntError),
-    Addr(AddrParseError),
-    Io(io::Error),
-}
+mod error {
+    use std::{ io, num, net };
 
-impl From<&'static str> for ParseSegmentError {
-    fn from(s: &'static str) -> ParseSegmentError {
-        ParseSegmentError::Str(s.into())
+    error_chain! {
+        foreign_links {
+            num::ParseIntError, Num;
+            net::AddrParseError, Addr;
+            io::Error, Io;
+        }
     }
 }
 
-impl From<String> for ParseSegmentError {
-    fn from(s: String) -> ParseSegmentError {
-        ParseSegmentError::Str(s.into())
-    }
-}
-
-impl From<ParseIntError> for ParseSegmentError {
-    fn from(err: ParseIntError) -> ParseSegmentError {
-        ParseSegmentError::Num(err)
-    }
-}
-
-impl From<()> for ParseSegmentError {
-    fn from(_: ()) -> ParseSegmentError {
-        ParseSegmentError::Str("unknown".into())
-    }
-}
-
-impl From<AddrParseError> for ParseSegmentError {
-    fn from(err: AddrParseError) -> ParseSegmentError {
-        ParseSegmentError::Addr(err)
-    }
-}
-
-impl From<io::Error> for ParseSegmentError {
-    fn from(err: io::Error) -> ParseSegmentError {
-        ParseSegmentError::Io(err)
-    }
-}
-
-fn segment_from_strs<'a, S: Iterator<Item=&'a str>>(strs: &mut S) -> Result<Option<Segment>, ParseSegmentError> {
-    let missing_data = ParseSegmentError::Str(Cow::Borrowed("missing segment data"));
+fn segment_from_strs<'a, S: Iterator<Item=&'a str>>(strs: &mut S) -> Result<Option<Segment>> {
+    let missing_data = Error::from("missing segment data");
     if let Some(s) = strs.next() {
         let data = || strs.next().ok_or(missing_data);
         Ok(Some(match s {
@@ -78,8 +43,8 @@ fn segment_from_strs<'a, S: Iterator<Item=&'a str>>(strs: &mut S) -> Result<Opti
 }
 
 impl FromStr for MultiAddr {
-    type Err = ParseSegmentError;
-    fn from_str(s: &str) -> Result<Self, Self::Err> {
+    type Err = Error;
+    fn from_str(s: &str) -> Result<Self> {
         if &s[0..1] != "/" {
             return Err("didn't start with /".into());
         }

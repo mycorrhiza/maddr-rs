@@ -1,4 +1,8 @@
+#![recursion_limit = "1024"]
+
 extern crate base58;
+#[macro_use]
+extern crate error_chain;
 extern crate multihash;
 extern crate varint;
 
