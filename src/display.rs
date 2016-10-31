@@ -1,7 +1,5 @@
 use std::fmt;
 
-use base58::ToBase58;
-
 use { Segment, MultiAddr };
 
 impl fmt::Display for Segment {
@@ -21,7 +19,7 @@ impl fmt::Display for Segment {
                 try!(write!(f, "/{}", port));
             }
             Segment::Ipfs(ref multihash) => {
-                try!(write!(f, "/{}", multihash.to_bytes().to_base58()));
+                try!(write!(f, "/{}", multihash));
             }
             Segment::Udt
             | Segment::Utp

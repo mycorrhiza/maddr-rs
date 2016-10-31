@@ -1,8 +1,5 @@
 use std::str::FromStr;
 
-use base58::FromBase58;
-use multihash::ReadMultiHash;
-
 use { Segment, MultiAddr };
 use Segment::*;
 pub use self::error::*;
@@ -10,7 +7,13 @@ pub use self::error::*;
 mod error {
     use std::{ io, num, net };
 
+    use multihash;
+
     error_chain! {
+        links {
+            multihash::parse::Error, multihash::parse::ErrorKind, MultiHash;
+        }
+
         foreign_links {
             num::ParseIntError, Num;
             net::AddrParseError, Addr;
@@ -30,7 +33,7 @@ fn segment_from_strs<'a, S: Iterator<Item=&'a str>>(strs: &mut S) -> Result<Opti
             "dccp" => Dccp(try!(try!(data()).parse())),
             "sctp" => Sctp(try!(try!(data()).parse())),
             "tcp" => Tcp(try!(try!(data()).parse())),
-            "ipfs" => Ipfs(try!((&try!(try!(data()).from_base58())[..]).read_multihash())),
+            "ipfs" => Ipfs(try!(try!(data()).parse())),
             "udt" => Udt,
             "utp" => Utp,
             "http" => Http,
