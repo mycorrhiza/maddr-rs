@@ -4,7 +4,7 @@ extern crate base58;
 #[macro_use]
 extern crate error_chain;
 extern crate multihash;
-extern crate varint;
+extern crate varmint;
 
 mod multiaddr;
 mod segment;

@@ -1,7 +1,7 @@
 use std::io;
 use std::net::{ Ipv4Addr, Ipv6Addr };
 
-use varint::WriteVarInt;
+use varmint::WriteVarInt;
 use multihash::WriteMultiHash;
 
 use { MultiAddr, Segment };

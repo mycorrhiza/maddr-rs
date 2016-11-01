@@ -1,7 +1,7 @@
 use std::io;
 use std::net::{ Ipv4Addr, Ipv6Addr };
 
-use varint::ReadVarInt;
+use varmint::ReadVarInt;
 use multihash::ReadMultiHash;
 
 use { MultiAddr, Segment };
