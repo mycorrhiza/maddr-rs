@@ -4,7 +4,6 @@ version = "0.1.0"
 authors = ["Wim Looman <wim@nemo157.com>"]
 
 [dependencies]
-base58 = { git = "https://github.com/Nemo157/base58-rs" }
 error-chain = "0.5.0"
 multihash = { git = "https://github.com/Nemo157/multihash-rs", features = ["parse", "display"] }
 varmint = "0.1.0"
