@@ -1,6 +1,6 @@
 use std::net::{ Ipv4Addr, Ipv6Addr };
 
-use multihash::MultiHash;
+use mhash::MultiHash;
 
 #[derive(PartialEq, Eq, Clone)]
 pub enum Segment {
@@ -9,7 +9,7 @@ pub enum Segment {
     Https,
     IP4(Ipv4Addr),
     IP6(Ipv6Addr),
-    Ipfs(MultiHash),
+    Ipfs(MultiHash<Vec<u8>>),
     Sctp(u16),
     Tcp(u16),
     Udp(u16),

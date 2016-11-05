@@ -2,7 +2,7 @@ use std::io;
 use std::net::{ Ipv4Addr, Ipv6Addr };
 
 use varmint::ReadVarInt;
-use multihash::ReadMultiHash;
+use mhash::ReadMultiHash;
 
 use { MultiAddr, Segment };
 use Segment::*;
@@ -112,8 +112,10 @@ impl<R: io::Read> ReadMultiAddr for R {
 #[cfg(test)]
 mod tests {
     use std::net::{ Ipv4Addr, Ipv6Addr };
+
+    use mhash::{ MultiHash, MultiHashVariant };
+
     use { Segment, MultiAddr, ReadMultiAddr };
-    use multihash::MultiHash;
 
     #[test]
     fn ip4() {
@@ -138,12 +140,12 @@ mod tests {
 
     #[test]
     fn ipfs() {
-        let multihash = MultiHash::Sha2_256([
+        let multihash = MultiHash::new(MultiHashVariant::Sha2_256, vec![
             213, 46, 187, 137, 216, 91, 2, 162,
             132, 148, 130, 3, 166, 47, 242, 131,
             137, 197, 124, 159, 66, 190, 236, 78,
             194, 13, 183, 106, 104, 145, 28, 11,
-        ], 32);
+        ]).unwrap();
 
         let mut buffer: &[u8] = &[
             0b10100101, 0b00000011, 34,

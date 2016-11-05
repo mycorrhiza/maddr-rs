@@ -2,7 +2,7 @@
 
 #[macro_use]
 extern crate error_chain;
-extern crate multihash;
+extern crate mhash;
 extern crate varmint;
 
 mod multiaddr;
