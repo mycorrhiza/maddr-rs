@@ -1,0 +1,34 @@
+language: rust
+sudo: true
+cache: cargo
+rust:
+  - nightly
+  - beta
+  - stable
+
+env:
+  global:
+    - secure: "Z9i3fsLCmG0feJv8hGIBSHJuZ5giAeclybiRYZmGPOo50fKdXcbvgzPBpNsXZkouWBt0CK1oMFlSy7cn6SwDvzc6c4s+M5ie3MFATkNMwcngDNu9I1Lg9yJNIY8cvapsbXkc6sALx4uL54SntfeEFrcTbow7ua94vO3o+kwXVY6mNEZu/KV9RgBLRQyV1IQVg+NQcjzXt/OlaMTuG7gw4NkbbCmfaKqjnQvRZ3+7C9xocgi2p9GEFsEIHjkGILddGQxP1v3bNAJrAS6PbcXF2L7C6aZiGRRgrTCFYkJAewzAFycQhnh9Tc2jutcVxv5fmWNPJRLJkiddnHFzlHypdLmvFPDwztNvqeLTFKF2uCVE/VwBHsI3rU8aVfDSP+uU/oyjM75gLRr6P3FIaHNzV3d61YaM2S83sd6juBBz4Yd0KIxOjm+563oAEOrg5sjpQVPzcL6e97QqW6dgQ53ZWqJL2uaqzNCKLFgmqLvhyV4XHuAvYHMsMrunIw7EFIlPVD51tdNC4gNPiwCQVvfmsl+utjq1wsouAHR6q/oU1cr5ht1ckZSGzRlIknt2AkMMo/gl6/u9lN0Po1hcP4AP1E+b2pHT2BXVaXgv4zeYy2DHUsz2oKFElD6LteZpvrl00tQ4jnA2Sx3f3J0bt/0DRxhnxPacQR6o1cPPvTHYIdk="
+
+before_script:
+  - bash -c 'if [[ "$TRAVIS_RUST_VERSION" == "nightly" ]]; then
+      cargo install clippy --force;
+    fi'
+
+script:
+  - cargo test
+  - bash -c 'if [[ "$TRAVIS_RUST_VERSION" == "nightly" ]]; then
+      cargo clippy -- -D warnings;
+    fi'
+
+before_deploy:
+  - cargo package
+
+deploy:
+  provider: script
+  script: cargo publish --verbose --token "$CRATES_IO_TOKEN"
+  skip_cleanup: true
+  on:
+    tags: true
+    all_branches: true
+    condition: "$TRAVIS_RUST_VERSION = stable"
