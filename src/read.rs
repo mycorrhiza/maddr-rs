@@ -121,12 +121,8 @@ impl<R: io::Read> ReadMultiAddr for R {
         // reached when attempting to read a segment code (any other EOF is
         // treated as an error).
         let mut segments = Vec::new();
-        loop {
-            if let Some(segment) = try!(self.try_read_segment()) {
-                segments.push(segment);
-            } else {
-                break;
-            }
+        while let Some(segment) = try!(self.try_read_segment()) {
+            segments.push(segment);
         }
         try!(self.check_empty());
         Ok(MultiAddr::new(segments))
