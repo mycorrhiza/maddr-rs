@@ -32,17 +32,7 @@ impl<W: io::Write> WriteHelper for W {
     }
 
     fn write_ipv6addr(&mut self, addr: &Ipv6Addr) -> io::Result<()> {
-        // TODO: waiting on https://github.com/rust-lang/rust/issues/32313
-        // try!(self.write_all(&addr.octets()));
-        let segments = addr.segments();
-        try!(self.write_u16_be(segments[0]));
-        try!(self.write_u16_be(segments[1]));
-        try!(self.write_u16_be(segments[2]));
-        try!(self.write_u16_be(segments[3]));
-        try!(self.write_u16_be(segments[4]));
-        try!(self.write_u16_be(segments[5]));
-        try!(self.write_u16_be(segments[6]));
-        try!(self.write_u16_be(segments[7]));
+        try!(self.write_all(&addr.octets()));
         Ok(())
     }
 
