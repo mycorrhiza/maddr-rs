@@ -3,6 +3,15 @@ name = "maddr"
 version = "0.1.0"
 authors = ["Wim Looman <wim@nemo157.com>"]
 
+description = "An implementation of the multiaddr format used in IPFS"
+
+repository = "https://github.com/mycorrhiza/maddr-rs"
+
+readme = "README.md"
+keywords = ["multiaddr", "multiformats"]
+
+license = "MIT/Apache-2.0"
+
 [dependencies]
 error-chain = "0.5.0"
 mhash = "0.1.1"
