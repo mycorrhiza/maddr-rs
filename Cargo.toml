@@ -5,5 +5,5 @@ authors = ["Wim Looman <wim@nemo157.com>"]
 
 [dependencies]
 error-chain = "0.5.0"
-mhash = { git = "https://github.com/mycorrhiza/mhash-rs" }
+mhash = "0.1.1"
 varmint = "0.1.2"
