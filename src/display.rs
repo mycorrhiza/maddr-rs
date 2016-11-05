@@ -57,6 +57,7 @@ impl fmt::Debug for Segment {
         Ok(())
     }
 }
+
 #[cfg(test)]
 mod tests {
     use std::net::{ Ipv4Addr, Ipv6Addr };

@@ -85,7 +85,31 @@ impl<R: io::Read> ReadHelper for R {
     }
 }
 
+/// A trait to allow reading a `MultiAddr` from an object.
+///
+/// This is primarily intended to provide support for the `io::Read` trait,
+/// allowing reading a `MultiAddr` from a stream.
 pub trait ReadMultiAddr {
+    /// Read a `MultiAddr` from this object. Consumes the entire object as
+    /// there's no way to detect the end of an encoded `MultiAddr`.
+    ///
+    /// # Errors
+    ///
+    /// Any errors encountered when reading from the underlying `io::Read`
+    /// stream will be propagated out, if that happens an undefined number of
+    /// bytes will already have been consumed from the stream.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::net::Ipv4Addr;
+    /// use maddr::{ MultiAddr, Segment, ReadMultiAddr };
+    ///
+    /// let mut buffer: &[u8] = &[4, 1, 2, 3, 4];
+    /// assert_eq!(
+    ///     MultiAddr::new(vec![Segment::IP4(Ipv4Addr::new(1, 2, 3, 4))]),
+    ///     buffer.read_multiaddr().unwrap());
+    /// ```
     fn read_multiaddr(&mut self) -> io::Result<MultiAddr>;
 }
 

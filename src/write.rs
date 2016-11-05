@@ -66,7 +66,32 @@ impl<W: io::Write> WriteHelper for W {
     }
 }
 
+/// A trait to allow writing a `MultiAddr` to an object.
+///
+/// This is primarily intended to provide support for the `io::Write` trait,
+/// allowing writing a `MultiAddr` to a stream.
 pub trait WriteMultiAddr {
+    /// Write a `MultiAddr` to this object.
+    ///
+    /// # Errors
+    ///
+    /// Any errors encountered when writing to the underlying `io::Write`
+    /// stream will be propagated out, if that happens an undefined number of
+    /// bytes will already have been written to the stream.
+    ///
+    /// # Examples
+    ///
+    /// ```rust
+    /// use std::net::Ipv4Addr;
+    /// use maddr::{ MultiAddr, Segment, WriteMultiAddr };
+    ///
+    /// let mut buffer = vec![];
+    /// buffer.write_multiaddr(&MultiAddr::new(vec![
+    ///         Segment::IP4(Ipv4Addr::new(1, 2, 3, 4))
+    ///     ]))
+    ///     .unwrap();
+    /// assert_eq!(vec![4, 1, 2, 3, 4], buffer);
+    /// ```
     fn write_multiaddr(&mut self, multiaddr: &MultiAddr) -> io::Result<()>;
 }
 
