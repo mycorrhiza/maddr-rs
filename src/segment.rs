@@ -3,7 +3,7 @@ use std::net::{ Ipv4Addr, Ipv6Addr };
 use mhash::MultiHash;
 
 #[derive(PartialEq, Eq, Clone)]
-/// The possible multiaddress segments.
+/// The possible multiaddr segments.
 pub enum Segment {
     /// Datagram Congestion Control Protocol, a transport layer protocol.
     /// The argument is the port number.

@@ -1,6 +1,6 @@
 use Segment;
 
-/// A decoded multiaddress.
+/// A decoded multiaddr.
 #[derive(Eq, PartialEq, Clone)]
 pub struct MultiAddr {
     segments: Vec<Segment>,
