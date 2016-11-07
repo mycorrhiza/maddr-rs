@@ -2,6 +2,7 @@ use std::net::{ Ipv4Addr, Ipv6Addr };
 
 use mhash::MultiHash;
 
+#[allow(variant_size_differences)]
 #[derive(PartialEq, Eq, Clone)]
 /// The possible multiaddr segments.
 pub enum Segment {
@@ -26,7 +27,7 @@ pub enum Segment {
 
     /// The InterPlanetary File System, an application layer protocol.
     /// The argument is the public hash of an IPFS node.
-    Ipfs(MultiHash<Vec<u8>>),
+    Ipfs(MultiHash),
 
     /// Stream Control Transmission Protocol, a transport layer protocol.
     /// The argument is the port number.

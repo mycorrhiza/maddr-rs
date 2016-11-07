@@ -88,7 +88,7 @@ mod tests {
 
     #[test]
     fn ipfs() {
-        let multihash = MultiHash::new(MultiHashVariant::Sha2_256, vec![
+        let multihash = MultiHash::new(MultiHashVariant::Sha2_256, &[
             213, 46, 187, 137, 216, 91, 2, 162,
             132, 148, 130, 3, 166, 47, 242, 131,
             137, 197, 124, 159, 66, 190, 236, 78,

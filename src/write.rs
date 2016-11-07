@@ -46,7 +46,7 @@ impl<W: io::Write> WriteHelper for W {
             Udp(port) | Dccp(port) | Sctp(port) | Tcp(port) =>
                 try!(self.write_u16_be(port)),
             Ipfs(ref multihash) => {
-                try!(self.write_u64_varint(multihash.output_len() as u64));
+                try!(self.write_usize_varint(multihash.output_len()));
                 try!(self.write_multihash(multihash));
             }
             Udt | Utp | Http | Https => {
@@ -123,7 +123,7 @@ mod tests {
 
     #[test]
     fn ipfs() {
-        let multihash = MultiHash::new(MultiHashVariant::Sha2_256, vec![
+        let multihash = MultiHash::new(MultiHashVariant::Sha2_256, &[
             213, 46, 187, 137, 216, 91, 2, 162,
             132, 148, 130, 3, 166, 47, 242, 131,
             137, 197, 124, 159, 66, 190, 236, 78,
