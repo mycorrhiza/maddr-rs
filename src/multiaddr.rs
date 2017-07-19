@@ -1,3 +1,5 @@
+use std::ops::Add;
+
 use Segment;
 
 /// A decoded multiaddr.
@@ -42,5 +44,20 @@ impl MultiAddr {
     /// ```
     pub fn split_off_last(mut self) -> Option<(MultiAddr, Segment)> {
         self.segments.pop().map(|tail| (self, tail))
+    }
+}
+
+impl<T> From<T> for MultiAddr where T: Into<Segment> {
+    fn from(segment: T) -> MultiAddr {
+        MultiAddr::new(vec![segment.into()])
+    }
+}
+
+impl<T> Add<T> for MultiAddr where T: Into<MultiAddr> {
+    type Output = MultiAddr;
+
+    fn add(mut self, rhs: T) -> MultiAddr {
+        self.segments.extend_from_slice(&rhs.into().segments);
+        self
     }
 }

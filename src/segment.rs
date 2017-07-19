@@ -1,4 +1,4 @@
-use std::net::{ Ipv4Addr, Ipv6Addr };
+use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 use mhash::MultiHash;
 
@@ -81,5 +81,26 @@ impl Segment {
             Segment::Udt => "udt",
             Segment::Utp => "utp",
         }
+    }
+}
+
+impl From<IpAddr> for Segment {
+    fn from(ip: IpAddr) -> Segment {
+        match ip {
+            IpAddr::V4(ip) => ip.into(),
+            IpAddr::V6(ip) => ip.into(),
+        }
+    }
+}
+
+impl From<Ipv4Addr> for Segment {
+    fn from(ip: Ipv4Addr) -> Segment {
+        Segment::IP4(ip)
+    }
+}
+
+impl From<Ipv6Addr> for Segment {
+    fn from(ip: Ipv6Addr) -> Segment {
+        Segment::IP6(ip)
     }
 }
