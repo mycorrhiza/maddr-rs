@@ -61,3 +61,27 @@ impl<T> Add<T> for MultiAddr where T: Into<MultiAddr> {
         self
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::net::Ipv4Addr;
+
+    use {MultiAddr, Segment};
+
+    #[test]
+    fn from_ip4() {
+        assert_eq!(
+            MultiAddr::new(vec![Segment::IP4(Ipv4Addr::new(1, 2, 3, 4))]),
+            Ipv4Addr::new(1, 2, 3, 4).into());
+    }
+
+    #[test]
+    fn add() {
+        assert_eq!(
+            MultiAddr::new(vec![
+                Segment::IP4(Ipv4Addr::new(1, 2, 3, 4)),
+                Segment::Tcp(22),
+            ]),
+            MultiAddr::from(Ipv4Addr::new(1, 2, 3, 4)) + Segment::Tcp(22));
+    }
+}

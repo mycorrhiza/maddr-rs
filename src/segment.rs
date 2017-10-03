@@ -104,3 +104,38 @@ impl From<Ipv6Addr> for Segment {
         Segment::IP6(ip)
     }
 }
+
+#[cfg(test)]
+mod tests {
+    use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+
+    use Segment;
+
+    #[test]
+    fn from_ip4() {
+        assert_eq!(
+            Segment::IP4(Ipv4Addr::new(1, 2, 3, 4)),
+            Ipv4Addr::new(1, 2, 3, 4).into());
+    }
+
+    #[test]
+    fn from_ip6() {
+        assert_eq!(
+            Segment::IP6(Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11)),
+            Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11).into());
+    }
+
+    #[test]
+    fn from_ip_ip4() {
+        assert_eq!(
+            Segment::IP4(Ipv4Addr::new(1, 2, 3, 4)),
+            IpAddr::V4(Ipv4Addr::new(1, 2, 3, 4)).into());
+    }
+
+    #[test]
+    fn from_ip_ip6() {
+        assert_eq!(
+            Segment::IP6(Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11)),
+            IpAddr::V6(Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11)).into());
+    }
+}
