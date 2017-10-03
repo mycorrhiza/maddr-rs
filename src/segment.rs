@@ -5,6 +5,23 @@ use mhash::MultiHash;
 #[allow(variant_size_differences)]
 #[derive(PartialEq, Eq, Clone)]
 /// The possible multiaddr segments.
+///
+/// # Examples
+///
+/// This type can be converted from some of the standard library types, via
+/// `From`, e.g. from `Ipv4Addr`:
+///
+/// ```rust
+/// use std::net::Ipv4Addr;
+/// use maddr::Segment;
+///
+/// let addr = Ipv4Addr::new(1, 2, 3, 4);
+/// let segment = addr.into();
+///
+/// assert_eq!(Segment::IP4(addr), segment);
+/// ```
+///
+/// Look at the [implementations](#implementations) section below for more.
 pub enum Segment {
     /// Datagram Congestion Control Protocol, a transport layer protocol.
     /// The argument is the port number.

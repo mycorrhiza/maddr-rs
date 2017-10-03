@@ -3,6 +3,41 @@ use std::ops::Add;
 use Segment;
 
 /// A decoded multiaddr.
+///
+/// # Examples
+///
+/// This type can be converted from some standard library types via
+/// `From<T> where Segment: From<T>`, e.g. from `Ipv4Addr`:
+///
+/// ```rust
+/// use std::net::Ipv4Addr;
+/// use maddr::{Segment, MultiAddr};
+///
+/// let addr = Ipv4Addr::new(1, 2, 3, 4);
+/// let multiaddr = addr.into();
+///
+/// assert_eq!(MultiAddr::new(vec![Segment::IP4(addr)]), multiaddr);
+/// ```
+///
+/// check the [segment trait implementations to see what types those
+/// are](enum.Segment.html#implementations).
+///
+/// ---
+///
+/// You can construct more complicated `MultiAddr`'s via concatenation of
+/// segments, for example creating a `MultiAddr` referring to tcp port 22 on
+/// host 1.2.3.4
+///
+/// ```rust
+/// use std::net::Ipv4Addr;
+/// use std::convert::From;
+/// use maddr::{Segment, MultiAddr};
+///
+/// let addr = Ipv4Addr::new(1, 2, 3, 4);
+/// let multiaddr = MultiAddr::from(addr) + Segment::Tcp(22);
+///
+/// assert_eq!("/ip4/1.2.3.4/tcp/22", multiaddr.to_string());
+/// ```
 #[derive(Eq, PartialEq, Clone)]
 pub struct MultiAddr {
     segments: Vec<Segment>,
