@@ -1,10 +1,27 @@
-use std::net::{ Ipv4Addr, Ipv6Addr };
+use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 
 use mhash::MultiHash;
 
 #[allow(variant_size_differences)]
 #[derive(PartialEq, Eq, Clone)]
 /// The possible multiaddr segments.
+///
+/// # Examples
+///
+/// This type can be converted from some of the standard library types, via
+/// `From`, e.g. from `Ipv4Addr`:
+///
+/// ```rust
+/// use std::net::Ipv4Addr;
+/// use maddr::Segment;
+///
+/// let addr = Ipv4Addr::new(1, 2, 3, 4);
+/// let segment = addr.into();
+///
+/// assert_eq!(Segment::IP4(addr), segment);
+/// ```
+///
+/// Look at the [implementations](#implementations) section below for more.
 pub enum Segment {
     /// Datagram Congestion Control Protocol, a transport layer protocol.
     /// The argument is the port number.
@@ -81,5 +98,61 @@ impl Segment {
             Segment::Udt => "udt",
             Segment::Utp => "utp",
         }
+    }
+}
+
+impl From<IpAddr> for Segment {
+    fn from(ip: IpAddr) -> Segment {
+        match ip {
+            IpAddr::V4(ip) => ip.into(),
+            IpAddr::V6(ip) => ip.into(),
+        }
+    }
+}
+
+impl From<Ipv4Addr> for Segment {
+    fn from(ip: Ipv4Addr) -> Segment {
+        Segment::IP4(ip)
+    }
+}
+
+impl From<Ipv6Addr> for Segment {
+    fn from(ip: Ipv6Addr) -> Segment {
+        Segment::IP6(ip)
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
+
+    use Segment;
+
+    #[test]
+    fn from_ip4() {
+        assert_eq!(
+            Segment::IP4(Ipv4Addr::new(1, 2, 3, 4)),
+            Ipv4Addr::new(1, 2, 3, 4).into());
+    }
+
+    #[test]
+    fn from_ip6() {
+        assert_eq!(
+            Segment::IP6(Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11)),
+            Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11).into());
+    }
+
+    #[test]
+    fn from_ip_ip4() {
+        assert_eq!(
+            Segment::IP4(Ipv4Addr::new(1, 2, 3, 4)),
+            IpAddr::V4(Ipv4Addr::new(1, 2, 3, 4)).into());
+    }
+
+    #[test]
+    fn from_ip_ip6() {
+        assert_eq!(
+            Segment::IP6(Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11)),
+            IpAddr::V6(Ipv6Addr::new(0x2a02, 0x6b8, 0, 0, 0, 0, 0x11, 0x11)).into());
     }
 }
