@@ -27,7 +27,7 @@ impl<R: io::Read> ReadHelper for R {
     fn read_u16_be(&mut self) -> io::Result<u16> {
         let mut buffer = [0; 2];
         try!(self.read_exact(&mut buffer));
-        Ok(((buffer[0] as u16) << 8) + (buffer[1] as u16))
+        Ok(((u16::from(buffer[0])) << 8) + (u16::from(buffer[1])))
     }
 
     fn read_ipv4addr(&mut self) -> io::Result<Ipv4Addr> {
