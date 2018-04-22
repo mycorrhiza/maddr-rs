@@ -1,6 +1,6 @@
 [package]
 name = "maddr"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["Wim Looman <wim@nemo157.com>"]
 
 description = "An implementation of the multiaddr format used in IPFS"
@@ -13,6 +13,6 @@ keywords = ["multiaddr", "multiformats"]
 license = "MIT/Apache-2.0"
 
 [dependencies]
-error-chain = "0.5.0"
-mhash = "0.2.0"
+error-chain = "0.11.0"
+mhash = "0.3.0"
 varmint = "0.1.2"

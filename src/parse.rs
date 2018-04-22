@@ -5,23 +5,16 @@ use Segment::*;
 pub use self::error::*;
 
 mod error {
-    #![allow(trivial_casts)] // Caused by error_chain!
-    #![allow(missing_docs)] // Caused by error_chain!
-    #![allow(redundant_closure)] // Caused by error_chain!
-
     use std::{ io, num, net };
 
     use mhash;
 
     error_chain! {
-        links {
-            mhash::error::parse::Error, mhash::error::parse::ErrorKind, MultiHash;
-        }
-
         foreign_links {
-            num::ParseIntError, Num;
-            net::AddrParseError, Addr;
-            io::Error, Io;
+            MultiHash(mhash::error::parse::Error);
+            Num(num::ParseIntError);
+            Addr(net::AddrParseError);
+            Io(io::Error);
         }
     }
 }
