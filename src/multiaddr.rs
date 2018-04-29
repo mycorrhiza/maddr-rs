@@ -38,7 +38,7 @@ use Segment;
 ///
 /// assert_eq!("/ip4/1.2.3.4/tcp/22", multiaddr.to_string());
 /// ```
-#[derive(Eq, PartialEq, Clone)]
+#[derive(Eq, PartialEq, Clone, Hash)]
 pub struct MultiAddr {
     segments: Vec<Segment>,
 }

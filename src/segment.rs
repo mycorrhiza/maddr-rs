@@ -3,7 +3,7 @@ use std::net::{IpAddr, Ipv4Addr, Ipv6Addr};
 use mhash::MultiHash;
 
 #[allow(variant_size_differences)]
-#[derive(PartialEq, Eq, Clone)]
+#[derive(PartialEq, Eq, Clone, Hash)]
 /// The possible multiaddr segments.
 ///
 /// # Examples
